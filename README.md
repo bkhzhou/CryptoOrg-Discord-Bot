@@ -17,8 +17,8 @@ Update File: config.json
 
 Commands Available:
 - !list - Gives the 1st 100 Validator's name and Address https://crypto.org/explorer/validators
-- !val <Validator Address> - gives the status
-- !wallet <CRO Wallet Address> - gives wallet stats
+- !val \<Validator Address> - gives the status
+- !wallet \<CRO Wallet Address> - gives wallet stats
 ### Preview
 ![image](https://user-images.githubusercontent.com/79166987/227401584-13a22fb2-0a38-421c-9ca8-0a3cd6fa6022.png)
   
