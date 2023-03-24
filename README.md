@@ -2,6 +2,7 @@
 Integrated Crypto.org public API with a Discord Bot
 
 ## Install
+- NodeJS
 - Discord.js
 
 ```sh
