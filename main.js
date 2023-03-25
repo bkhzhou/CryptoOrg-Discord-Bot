@@ -22,21 +22,25 @@ client.on('messageCreate', async message => {
         const walletAPI = `https://crypto.org/explorer/api/v1/accounts/${wallet}`;
         request.get(walletAPI, function(error,response,body){
             const json = JSON.parse(body);
-            console.log(json);
-            var total = (json['result']['totalBalance'][0]['amount']/100000000).toFixed(2).toString();
-            var balance = (json['result']['balance'][0]['amount']/100000000).toFixed(2).toString();
-            var bondedBalance = (json['result']['bondedBalance'][0]['amount']/100000000).toFixed(2).toString();
-            var rewards = (json['result']['totalRewards'][0]['amount']/100000000).toFixed(2).toString();
-            const embed = new EmbedBuilder()
-                .setTitle('CRO Wallet')
-                .setColor(0x6FB5EE)
-                .addFields(
-                    { name: 'Wallet Total', value: total },
-                    { name: 'Current Balance', value: balance },
-                    { name: 'Bonded Balance', value: bondedBalance },
-                    { name: 'Total Rewards', value: rewards }
-                );
-            message.reply({embeds: [embed]});
+            try {
+                    console.log(json);
+                    var total = (json['result']['totalBalance'][0]['amount']/100000000).toFixed(2).toString();
+                    var balance = (json['result']['balance'][0]['amount']/100000000).toFixed(2).toString();
+                    var bondedBalance = (json['result']['bondedBalance'][0]['amount']/100000000).toFixed(2).toString();
+                    var rewards = (json['result']['totalRewards'][0]['amount']/100000000).toFixed(2).toString();
+                    const embed = new EmbedBuilder()
+                        .setTitle('CRO Wallet')
+                        .setColor(0x6FB5EE)
+                        .addFields(
+                            { name: 'Wallet Total', value: total },
+                            { name: 'Current Balance', value: balance },
+                            { name: 'Bonded Balance', value: bondedBalance },
+                            { name: 'Total Rewards', value: rewards }
+                        );
+                    message.reply({embeds: [embed]});
+            } catch {
+                channel.send('Please input a valid CRO Wallet Address.')
+            }
         });
     } else if(message.content.includes('!val')) {
         const splitValidator = message.content.split(" ", 2)
@@ -44,38 +48,42 @@ client.on('messageCreate', async message => {
         const validatorAPI = `https://crypto.org/explorer/api/v1/validators/${validator}?recentBlocks=100`;
         request.get(validatorAPI, function(error,response,body){
             const json = JSON.parse(body)
-            var nodeAddress = json['result']['consensusNodeAddress'];
-            var status = json['result']['status'];
-            var power = json['result']['power'];
-            var validatorName = json['result']['moniker'];
-            var website = json['result']['website'];
-            var contact = json['result']['securityContact'];
-            var description = json['result']['details'];
-            var comRate = json['result']['commissionRate'];
-            var comMaxRate = json['result']['commissionMaxRate'];
-            var comChangeRate = json['result']['commissionMaxChangeRate'];
-            var impreciseUpTime = json['result']['impreciseUpTime'];
-
-            comRate = ((parseFloat(comRate))*100).toFixed(2).toString() + '%';
-            comMaxRate = ((parseFloat(comMaxRate))*100).toFixed(2).toString() + '%';
-            comChangeRate = ((parseFloat(comChangeRate))*100).toFixed(2).toString() + '%';
-
-            const embed = new EmbedBuilder()
-                .setTitle(validatorName)
-                .setDescription(description)
-                .setColor(0xFFFFFF)
-                .addFields(
-                    { name: 'Contact', value: contact, inline: true },
-                    { name: 'Website', value: (`[${website}](https://${website})`), inline: true },
-                    { name: 'Node Address', value: nodeAddress },
-                    { name: 'Power', value: power, inline: true },
-                    { name: 'Status', value: status, inline: true },
-                    { name: 'Imprecise Up Time', value: impreciseUpTime, inline: true },
-                    { name: 'Commission Rate', value: comRate, inline: true },
-                    { name: 'Max Rate', value: comMaxRate, inline: true },
-                    { name: 'Change Rate', value: comChangeRate, inline: true },
-                )
-            message.reply({embeds: [embed]});
+            try {
+                var nodeAddress = json['result']['consensusNodeAddress'];
+                var status = json['result']['status'];
+                var power = json['result']['power'];
+                var validatorName = json['result']['moniker'];
+                var website = json['result']['website'];
+                var contact = json['result']['securityContact'];
+                var description = json['result']['details'];
+                var comRate = json['result']['commissionRate'];
+                var comMaxRate = json['result']['commissionMaxRate'];
+                var comChangeRate = json['result']['commissionMaxChangeRate'];
+                var impreciseUpTime = json['result']['impreciseUpTime'];
+    
+                comRate = ((parseFloat(comRate))*100).toFixed(2).toString() + '%';
+                comMaxRate = ((parseFloat(comMaxRate))*100).toFixed(2).toString() + '%';
+                comChangeRate = ((parseFloat(comChangeRate))*100).toFixed(2).toString() + '%';
+    
+                const embed = new EmbedBuilder()
+                    .setTitle(validatorName)
+                    .setDescription(description)
+                    .setColor(0xFFFFFF)
+                    .addFields(
+                        { name: 'Contact', value: contact, inline: true },
+                        { name: 'Website', value: (`[${website}](https://${website})`), inline: true },
+                        { name: 'Node Address', value: nodeAddress },
+                        { name: 'Power', value: power, inline: true },
+                        { name: 'Status', value: status, inline: true },
+                        { name: 'Imprecise Up Time', value: impreciseUpTime, inline: true },
+                        { name: 'Commission Rate', value: comRate, inline: true },
+                        { name: 'Max Rate', value: comMaxRate, inline: true },
+                        { name: 'Change Rate', value: comChangeRate, inline: true },
+                    )
+                message.reply({embeds: [embed]});
+            } catch {
+                channel.send('Please input a valid Validator Address.')
+            }
         });
     } else if(message.content.includes('!list')){
         const validatorList = `https://crypto.org/explorer/api/v1/validators?pagination=offset&page=1&limit=100&order=power.desc`;
